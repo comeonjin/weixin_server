@@ -12,6 +12,7 @@ router.get('/index.html', function(req, res, next) {
 
     var filePath = '../public/dist/index.html'
     var realPath = path.join(__dirname, filePath)
+    console.log(filePath)
     res.sendFile( realPath )
 
 });
@@ -20,6 +21,7 @@ router.get('/static/*', function(req, res, next) {
 
     var filePath = '../public/dist/static/'+req.params[0]
     var realPath = path.join(__dirname, filePath)
+    console.log(filePath)    
     res.sendFile( realPath )
 
 });
