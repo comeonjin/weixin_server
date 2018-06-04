@@ -10,6 +10,7 @@ var APPSECRET = '8410acf63ac99272f3f841469dc94afc'
 /* GET home page. */
 router.get('/index.html', function(req, res, next) {
 
+    console.log(req.query.code)
     var filePath = '../public/dist/index.html'
     var realPath = path.join(__dirname, filePath)
     console.log(filePath)
@@ -21,7 +22,7 @@ router.get('/static/*', function(req, res, next) {
 
     var filePath = '../public/dist/static/'+req.params[0]
     var realPath = path.join(__dirname, filePath)
-    console.log(filePath)    
+    console.log(filePath)
     res.sendFile( realPath )
 
 });
@@ -168,7 +169,7 @@ router.get('/user_answer', function(req, res, next){
                 //没答过该题
                 var modSql = 'UPDATE user SET history = ? WHERE openId='+'"'+req.query.openId+'"';
                 var modSqlParams = [JSON.stringify(history)];
-    
+
                 //改
                 connection.query(modSql,modSqlParams,function (err, result) {
                     if(err){
@@ -183,8 +184,8 @@ router.get('/user_answer', function(req, res, next){
                     })
                     console.log('-----------------------------------------------------------------\n\n');
                 });
-    
-            }            
+
+            }
             connection.end();
         }
 
