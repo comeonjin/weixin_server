@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 var request = require('request');
+// var dbConfig = requier('../public/javascripts/config.js')
 
 var APPID = 'wxd55316e683616eda'
 var APPSECRET = '8410acf63ac99272f3f841469dc94afc'
@@ -31,13 +32,10 @@ function sqltest(){
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-    // CODE = req.query.code
-    // console.log(filePath)
-    // var filePath = '../public/dist/index.html'
-    // var realPath = path.join(__dirname, filePath)
-    // res.sendFile( realPath )
-
-    sqltest()
+    CODE = req.query.code
+    var filePath = '../public/dist/index.html'
+    var realPath = path.join(__dirname, filePath)
+    res.sendFile( realPath )
 
 });
 
@@ -55,12 +53,18 @@ router.get('/request', function(req, res, next){
      * 根据code请求access_token的接口地址
      * 请求方式get
      */
+    if(CODE === ''){
+        res.send({
+            status: 2000,
+            message: '用户数据获取失败，请刷新页面'
+        })
+        return
+    }
 
     var url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='+APPID+'&secret='+APPSECRET+'&code='+CODE+'&grant_type=authorization_code'
     //根据code、appid、appsecret请求微信接口,获取用户数据
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(req.query.code)
             body = JSON.parse(body)
             //这里保存refresh_token
             var access_token = body.access_token
@@ -98,6 +102,14 @@ router.get('/user_answer', function(req, res, next){
      *  answer:
      * }
      */
+    if(req.query.openId === '' || req.query.openId === undefined){
+        res.send({
+            status: 1000,
+            message: "请等待页面数据刷新完毕后提交答案。"
+        })
+        return
+    }
+
     //接收到用户请求，查询用户是否存在
     var mysql = require('mysql');
 
