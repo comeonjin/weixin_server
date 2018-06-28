@@ -8,8 +8,6 @@ var request = require('request');
 var APPID = 'wxd55316e683616eda'
 var APPSECRET = '8410acf63ac99272f3f841469dc94afc'
 var CODE = ''
-var quesList = []
-var queTitle = ''
 
 function sqltest(){
     var mysql      = require('mysql');
@@ -49,25 +47,6 @@ router.get('/static/*', function(req, res, next) {
     res.sendFile( realPath )
 
 });
-
-router.get('/queslist', function(req, res){
-    console.log('接收到问题组请求 --------------- ')
-    res.json({
-        status: 1,
-        quetitle: queTitle,
-        queslist: quesList
-    })
-})
-
-router.get('/set_queslist', function(req, res){
-    console.log('接收到设置问题组请求')
-    queTitle = req.query.queTitle
-    quesList = req.query.quesList
-    res.json({
-        status: 1,
-        message: "题目和问题设置成功"
-    })
-})
 
 router.get('/request', function(req, res, next){
     /**
@@ -114,8 +93,6 @@ router.get('/request', function(req, res, next){
 })
 
 router.get('/user_answer', function(req, res, next){
-    console.log('接收到用户提交答案 ---------- ')
-    console.log(req.query.answer)
     /**
      * query结构
      * {
@@ -269,7 +246,86 @@ router.get('/user_history', function(req, res){
     connection.end();
 })
 
-
-
 module.exports = router;
 
+
+
+
+
+
+// router.get('/api/login', function(req, res, next) {
+//     console.log("接收到请求"+ req.query.phoneNumber);
+//     var weixindbname = req.query.phoneNumber;
+//     req.session.username = username;
+
+//     var data = {
+//       ret: true,
+//       username
+//     }
+//     res.send(data);
+
+// });
+
+
+// router.get('/api/isLogin', function(req, res, next) {
+//     console.log(req.session);
+//     if(req.session.username) {
+//      res.json({
+//        success : true,
+//        username : req.session.username+"已登录"
+//      })
+//     }else{
+//       res.send("请登录");
+
+//     }
+// });
+
+//当有access_token的时候查看access_token是否过期
+    // if(access_token !== '' && openid !== ''){
+    //     var validateUrl = 'https://api.weixin.qq.com/sns/auth?access_token='+access_token+'&openid='+openid
+    //     request(validateUrl, function(error, response, body){
+    //         if(!error && response.statusCode == 200){
+    //             body = JSON.parse(body)
+    //             if(body.errcode != 0){
+    //                 //使用refresh_token 刷新access_token
+    //                 var refreshUrl = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?appid='+APPID+'&grant_type=refresh_token&refresh_token='+refresh_token
+    //                 request(refreshUrl, function(error, response, body){
+    //                     if(!error && response.statusCode == 200){
+    //                         body = JSON.parse(body)
+    //                         access_token = body.access_token
+    //                         openid = body.openid
+
+    //                         console.log(body)
+
+    //                         //拉取用户信息(需scope为 snsapi_userinfo)
+    //                         /**
+    //                          * 请求方法
+    //                          * http：GET（请使用https协议） https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
+    //                          */
+    //                         var userInfoUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid+'&lang=zh_CN'
+    //                         request(userInfoUrl, function(error, response, body){
+    //                             if (!error && response.statusCode == 200) {
+    //                                 /**
+    //                                  * body正确返回的格式
+    //                                  * {
+    //                                  *  "openid":" OPENID",
+    //                                     "nickname": NICKNAME,
+    //                                     "sex":"1",
+    //                                     "province":"PROVINCE"
+    //                                     "city":"CITY",
+    //                                     "country":"COUNTRY",
+    //                                     "headimgurl":    "http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
+    //                                     "privilege":[ "PRIVILEGE1" "PRIVILEGE2"     ],
+    //                                     "unionid": "o6_bmasdasdsad6_2sgVt7hMZOPfL"
+    //                                     }
+    //                                 */
+    //                                 body = JSON.parse(body)
+    //                                 res.send(body)
+    //                             }
+    //                         })
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //     })
+    // }else{
