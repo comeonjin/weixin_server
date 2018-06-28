@@ -51,6 +51,7 @@ router.get('/static/*', function(req, res, next) {
 });
 
 router.get('/queslist', function(req, res){
+
     console.log('接收到问题组请求 --------------- ')
     res.json({
         status: 1,
@@ -60,6 +61,7 @@ router.get('/queslist', function(req, res){
 })
 
 router.get('/set_queslist', function(req, res){
+    
     console.log('接收到设置问题组请求')
     queTitle = req.query.queTitle
     quesList = req.query.quesList
