@@ -61,7 +61,7 @@ router.get('/queslist', function(req, res){
 })
 
 router.get('/set_queslist', function(req, res){
-    
+
     console.log('接收到设置问题组请求')
     queTitle = req.query.queTitle
     quesList = req.query.quesList
@@ -258,13 +258,21 @@ router.get('/user_history', function(req, res){
 
         console.log('--------------------------SELECT----------------------------');
         console.log(result);
-        var nickname = result[0].nickname
-        var history = JSON.parse(result[0].history)
-        res.json({
-            nickname: nickname,
-            history: history
-        })
-
+        if(result.length !== 0){
+            var nickname = result[0].nickname
+            var history = JSON.parse(result[0].history)
+            res.json({
+                nickname: nickname,
+                history: history
+            })
+        }else{
+            res.json({
+                status: 1500,
+                message: '用户未提交过数据，暂无历史数据',
+                history: []
+            })
+        }
+       
         console.log('------------------------------------------------------------\n\n');
     });
 
